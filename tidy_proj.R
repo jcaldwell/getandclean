@@ -62,7 +62,7 @@ merged2 <- tbl_df(df_merged)
 g_merge <- group_by(merged2, subject_id, activity)
 tidy_sum <- summarise_each(g_merge, funs(mean))
 
-tidy_sum
+View(tidy_sum)
 
 }
 
