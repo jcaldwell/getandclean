@@ -38,9 +38,9 @@ colnames(subject_train) <- c("subject")
 colnames(subject_test) <- c("subject")
 
 ##Prepare the dataframes for merging
-df_train <- data.frame(subject_train$subject_id, y_train$activity, X_train_extract)
+df_train <- data.frame(subject_train$subject, y_train$activity, X_train_extract)
 colnames(df_train) <- c(    "subject_id", "activity", as.character(feature_names))
-df_test <- data.frame(subject_test$subject_id, y_test$activity, X_test_extract)
+df_test <- data.frame(subject_test$subject, y_test$activity, X_test_extract)
 colnames(df_test) <- c(    "subject_id", "activity", as.character(feature_names))
 
 ##Merged dataframe of test and training data
@@ -52,6 +52,14 @@ activity_table <- read.table("activity_labels.txt")
 activities <- activity_table$V2
 df_merged[,"activity"] <- data.frame(apply(df_merged["activity"],2,as.factor))
 levels(df_merged$activity) <- activities
+
+## Finally use dplyr to prepare a summary table group by the subject and activity
+## showing means for each variable
+library(dplyr)
+
+merged2 <- tbl_df(df_merged)
+g_merge <- group_by(merged2, subject_id, activity)
+tidy_sum <- summarise_each(g_merge, funs(mean))
 
 
 
